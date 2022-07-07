@@ -31,7 +31,7 @@ spec:
           containerPort: {{ .Values.configs.networking.server }}
         - name: rest
           containerPort: {{ .Values.configs.networking.rest }}
-        {{- if ne .Values.configs.networking.broker "" }}
+        {{- if .Values.configs.networking.broker }}
         - name: broker
           containerPort: {{ .Values.configs.networking.broker }}
         {{ end }}

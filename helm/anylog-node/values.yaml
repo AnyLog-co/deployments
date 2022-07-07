@@ -4,6 +4,7 @@
 general:
   namespace: default
   app_name: anylog
+  pod_name: anylog-pod
   deployment_name: anylog-app
   service_name: anylog-svs
   configmap_name: anylog-configs
@@ -12,7 +13,7 @@ general:
 image:
   secretName: imagepullsecret
   repository: anylogco/anylog-network
-  tag: test
+  tag: develop
   pullPolicy: IfNotPresent
 
 configs:

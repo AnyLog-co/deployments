@@ -19,12 +19,12 @@ spec:
     port: {{ .Values.configs.networking.rest }}
     targetPort: {{ .Values.configs.networking.rest }}
     nodePort: {{ .Values.configs.networking.rest }}
-  {{- if ne .Values.configs.networking.broker "" }}
+  {{- if .Values.configs.networking.broker }} 
   - name: broker
     protocol: TCP
     port: {{ .Values.configs.networking.broker }}
     targetPort: {{ .Values.configs.networking.broker }}
     nodePort: {{ .Values.configs.networking.broker }}
-  {{ end }}
+  {{ end }} 
   selector:
     app: '{{ .Values.general.deployment_name }}'

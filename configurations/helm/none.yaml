@@ -4,34 +4,33 @@
 general:
   namespace: default
   app_name: anylog
-  deployment_name: anylog-operator-app
-  service_name: anylog-operator-svs
-  configmap_name: anylog-operator-configs
+  pod_name: anylog-pod
+  deployment_name: anylog-app
+  service_name: anylog-svs
+  configmap_name: anylog-configs
   replicas: 1
   
 image:
   secretName: imagepullsecret
   repository: anylogco/anylog-network
   tag: test
-#  repository: nvcr.io/uazwwnrnci5h/anylog/anylog-network
-#  tag: predevelop
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 configs:
   basic:
-    node_type: operator
-    node_name: anylog-operator-node
-    company_name: Nvidia
+    node_type: none
+    node_name: anylog-node
+    company_name: new company
     # if location is not set, will use `https://ipinfo.io/json` to get coordinates
     location: ""
   networking:
-    server: 32148
-    rest: 32149
+    server: 32748
+    rest: 32749
     # Optional broker port
     broker: ""
     # master node is not needed for REST node
     # Optional external & local IP instead of the default values
-    external_ip: anylog-operator-svs.default.svc.cluster.local
+    external_ip: ""
     local_ip: ""
   authentication:
     enable: false
@@ -39,18 +38,18 @@ configs:
     user: ""
     password: ""
   blockchain:
-    master_node: anylog-master-svs.default.svc.cluster.local:32048
+    ledger_conn: anylog-svs.default.svc.cluster.local:32048
     sync_time: 30 seconds
     source: master
     destination: file
   database:
     type: psql
-    ip: postgres-svs
+    ip: postgres-sv
     port: 5432
     user: admin
     password: demo
     # whether to have system_query database to run against memory directly
-    memory: true
+    memory: false
   operator:
     # set member ID for operator - should only be used when readding operator to blockchain but keep (file) configs consistent
     member: ""
@@ -59,9 +58,9 @@ configs:
     update_tsd: true
     archive: true
     distributor: true
-    db_name: test
+    db_name: tests
     partition:
-        enable: true
+        enable: false
         table: "*"
         column: timestamp
         interval: 14 days
@@ -73,7 +72,7 @@ configs:
     db_location: file_name[0]
     table_location: file_name[1]
   mqtt:
-    enable: true
+    enable: false
     broker: driver.cloudmqtt.com
     port: 18785
     user: ibglowct
@@ -88,7 +87,7 @@ configs:
       value: bring [readings][][value]
   settings:
     # whether to deploy a local script that extends the default startup script
-    deploy_local_script: false
+    deploy_local_script: "false"
     # An optional parameter for the number of workers threads that process requests which are send to the provided IP and Port.
     tcp_thread_pool: 6
     # Amount of time (in seconds) until REST timeout
@@ -96,10 +95,10 @@ configs:
     # The number of concurrent threads supporting HTTP requests.
     rest_threads: 5
     # Sets the number of threads supporting queries (the default is 3).
-    operator_pool: 3
+    query_pool: 3
     write_immediate: true
     threshold_time : 60 seconds
-    threshold_volume: 10KB
+    threshold_volume: 10kb
 
 
 

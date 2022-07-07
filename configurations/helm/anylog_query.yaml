@@ -1,9 +1,10 @@
 #----------------------------------------------------------------------------------------------------------------------
-# The following are the general values used to deploy an AnyLog instance of type: REST | AnyLog version: develop
+# The following are the general values used to deploy an AnyLog instance of type: Query | AnyLog version: predevelop
 #----------------------------------------------------------------------------------------------------------------------
 general:
   namespace: default
   app_name: anylog
+  pod_name: anylog-query-pod
   deployment_name: anylog-query-app
   service_name: anylog-query-svs
   configmap_name: anylog-query-configs
@@ -12,24 +13,26 @@ general:
 image:
   secretName: imagepullsecret
   repository: anylogco/anylog-network
-  tag: test
-#  repository: nvcr.io/uazwwnrnci5h/anylog/anylog-network
-#  tag: predevelop
+  tag: predevelop
   pullPolicy: Always
 
 configs:
   basic:
     node_type: query
     node_name: anylog-query-node
-    company_name: Nvidia
+    company_name: Fujitsu
     # if location is not set, will use `https://ipinfo.io/json` to get coordinates
     location: ""
+    country: ""
+    state: ""
+    city: ""
+
   networking:
     server: 32348
     rest: 32349
     # Optional broker port
     broker: ""
-    # master node is not needed for REST node
+    # query node is not needed for REST node
     # Optional external & local IP instead of the default values
     external_ip: anylog-query-svs.default.svc.cluster.local
     local_ip: ""
@@ -39,56 +42,52 @@ configs:
     user: ""
     password: ""
   blockchain:
-    master_node: anylog-master-svs.default.svc.cluster.local:32048
+    ledger_conn: anylog-master-svs.default.svc.cluster.local:32048
     sync_time: 30 seconds
     source: master
     destination: file
   database:
     type: sqlite
-    #ip: postgres-svs
-    #port: 5432
-    #user: admin
-    #password: demo
     # whether to have system_query database to run against memory directly
     memory: true
   operator:
     # set member ID for operator - should only be used when readding operator to blockchain but keep (file) configs consistent
     member: ""
-    cluster_name: new-cluster
-    create_table: true
-    update_tsd: true
-    archive: true
-    distributor: true
-    db_name: tests
+    cluster_name: ""
+    create_table: ""
+    update_tsd: ""
+    archive: ""
+    distributor: ""
+    db_name: ""
     partition:
-        enable: false
-        table: "*"
-        column: timestamp
-        interval: 14 days
-        keep: 6
-        sync: 1 day
+        enable: ""
+        table: ""
+        column: ""
+        interval: ""
+        keep: ""
+        sync: ""
   publisher:
-    compress: true
-    move: true
-    db_location: file_name[0]
-    table_location: file_name[1]
+    compress: ""
+    move: ""
+    db_location: ""
+    table_location: ""
   mqtt:
     enable: false
-    broker: driver.cloudmqtt.com
-    port: 18785
-    user: ibglowct
-    password: MSY4e009J7ts
-    log: false
+    broker: ""
+    port: ""
+    user: ""
+    password: ""
+    log: ""
     topic:
-      name: anylogedgex
-      db_name: test
-      table: plc_device
-      timestamp: now
-      value_type: float
-      value: bring [readings][][value]
+      name: ""
+      db_name: ""
+      table: ""
+      timestamp: ""
+      value_type: ""
+      value: ""
   settings:
     # whether to deploy a local script that extends the default startup script
-    deploy_local_script: "false"
+    deploy_local_script: false
     # An optional parameter for the number of workers threads that process requests which are send to the provided IP and Port.
     tcp_thread_pool: 6
     # Amount of time (in seconds) until REST timeout
@@ -99,7 +98,5 @@ configs:
     query_pool: 3
     write_immediate: true
     threshold_time : 60 seconds
-    threshold_volume: 10KB
-
-
+    threshold_volume: 10kb
 

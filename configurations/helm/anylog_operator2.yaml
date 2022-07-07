@@ -1,35 +1,39 @@
 #----------------------------------------------------------------------------------------------------------------------
-# The following are the general values used to deploy an AnyLog instance of type: REST | AnyLog version: develop
+# The following are the general values used to deploy an AnyLog instance of type: Operator | AnyLog version: predevelop
 #----------------------------------------------------------------------------------------------------------------------
 general:
   namespace: default
   app_name: anylog
-  deployment_name: anylog-master-app
-  service_name: anylog-master-svs
-  configmap_name: anylog-master-configs
+  pod_name: anylog-operator-pod2
+  deployment_name: anylog-operator-app2
+  service_name: anylog-operator-svs2
+  configmap_name: anylog-operator-configs2
   replicas: 1
-  
+
 image:
   secretName: imagepullsecret
   repository: anylogco/anylog-network
-  tag: test
+  tag: predevelop
   pullPolicy: Always
 
 configs:
   basic:
-    node_type: master
-    node_name: anylog-master-node
-    company_name: New Company
+    node_type: operator
+    node_name: anylog-operator-node2
+    company_name: Fujitsu
     # if location is not set, will use `https://ipinfo.io/json` to get coordinates
     location: ""
+    country: ""
+    state:
+    city: ""
   networking:
-    server: 32048
-    rest: 32049
+    server: 32158
+    rest: 32159
     # Optional broker port
-    broker: ""
+    broker: 32150
     # master node is not needed for REST node
     # Optional external & local IP instead of the default values
-    external_ip: anylog-master-svs.default.svc.cluster.local
+    external_ip: anylog-operator-svs2.default.svc.cluster.local
     local_ip: ""
   authentication:
     enable: false
@@ -37,29 +41,25 @@ configs:
     user: ""
     password: ""
   blockchain:
-    master_node: 127.0.0.1:32048
+    ledger_conn: anylog-master-svs.default.svc.cluster.local:32048
     sync_time: 30 seconds
     source: master
     destination: file
   database:
-    type: psql
-    ip: postgres-svs
-    port: 5432
-    user: admin
-    password: demo
+    type: sqlite
     # whether to have system_query database to run against memory directly
     memory: true
   operator:
     # set member ID for operator - should only be used when readding operator to blockchain but keep (file) configs consistent
     member: ""
-    cluster_name: new-cluster
+    cluster_name: fujitsu-cluster2
     create_table: true
     update_tsd: true
     archive: true
     distributor: true
-    db_name: tests
+    db_name: fujitsu
     partition:
-        enable: false
+        enable: true
         table: "*"
         column: timestamp
         interval: 14 days
@@ -71,22 +71,22 @@ configs:
     db_location: file_name[0]
     table_location: file_name[1]
   mqtt:
-    enable: false
-    broker: driver.cloudmqtt.com
-    port: 18785
-    user: ibglowct
-    password: MSY4e009J7ts
+    enable: true
+    broker: local
+    port: 32160
+    user: ""
+    password: ""
     log: false
     topic:
       name: anylogedgex
-      db_name: test
+      db_name: fujitsu
       table: plc_device
       timestamp: now
       value_type: float
       value: bring [readings][][value]
   settings:
     # whether to deploy a local script that extends the default startup script
-    deploy_local_script: "false"
+    deploy_local_script: true
     # An optional parameter for the number of workers threads that process requests which are send to the provided IP and Port.
     tcp_thread_pool: 6
     # Amount of time (in seconds) until REST timeout
@@ -94,10 +94,7 @@ configs:
     # The number of concurrent threads supporting HTTP requests.
     rest_threads: 5
     # Sets the number of threads supporting queries (the default is 3).
-    query_pool: 3
+    operator_pool: 3
     write_immediate: true
     threshold_time : 60 seconds
-    threshold_volume: 10KB
-
-
-
+    threshold_volume: 10kb
