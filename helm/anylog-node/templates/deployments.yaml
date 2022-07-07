@@ -26,6 +26,8 @@ spec:
         envFrom:
         - configMapRef:
             name: '{{ .Values.general.configmap_name }}'
+        tty: true
+        stdin: true
         ports:
         - name: server
           containerPort: {{ .Values.configs.networking.server }}
