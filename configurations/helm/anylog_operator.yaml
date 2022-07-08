@@ -13,7 +13,7 @@ general:
 image:
   secretName: imagepullsecret
   repository: anylogco/anylog-network
-  tag: predevelop
+  tag: predevelop-arm
   pullPolicy: Always
 
 configs:
@@ -33,7 +33,7 @@ configs:
     broker: ""
     # master node is not needed for REST node
     # Optional external & local IP instead of the default values
-    external_ip: anylog-operator-svs1.default.svc.cluster.local
+    external_ip: ""
     local_ip: ""
   authentication:
     enable: false
@@ -41,7 +41,7 @@ configs:
     user: ""
     password: ""
   blockchain:
-    ledger_conn: anylog-master-svs.default.svc.cluster.local:32048
+    ledger_conn: 139.162.74.33:32048
     sync_time: 30 seconds
     source: master
     destination: file
