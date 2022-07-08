@@ -30,7 +30,7 @@ configs:
     server: 32158
     rest: 32159
     # Optional broker port
-    broker: 32150
+    broker: 32160
     # master node is not needed for REST node
     # Optional external & local IP instead of the default values
     external_ip: anylog-operator-svs2.default.svc.cluster.local
