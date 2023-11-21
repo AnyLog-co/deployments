@@ -1,7 +1,7 @@
 version: "2.2"
 services:
   remote-cli:
-    image: anylogco/remote-cli:latest
+    image: anylogco/remote-cli:dynics
     container_name: remote-cli
     restart: always
     stdin_open: true
