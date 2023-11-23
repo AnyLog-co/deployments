@@ -12,7 +12,7 @@ def get_cmd(remove_policies:bool=False)->list:
         sub set of the blockchain consisting of cluster, operator, table as a list of python dictionaries
     """
     headers = {
-        "command": "blockchain get (cluster, operator, table, query)",
+        "command": "blockchain get (cluster, operator, table)",
         "User-Agent": "AnyLog/1.23"
     }
 
