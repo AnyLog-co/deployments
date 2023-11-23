@@ -1,0 +1,23 @@
+version: "2.2"
+services:
+  anylog-operator:
+    image: anylogco/anylog-network:${TAG}
+    restart: always
+    env_file:
+      - anylog_configs.env
+    environment:
+      - INIT_TYPE=${INIT_TYPE}
+    container_name: ${CONTAINER_NAME}
+    stdin_open: true
+    tty: true
+    network_mode: ${NETWORK}
+    volumes:
+      - anylog-operator-anylog:/app/AnyLog-Network/anylog
+      - anylog-operator-blockchain:/app/AnyLog-Network/blockchain
+      - anylog-operator-data:/app/AnyLog-Network/data
+      - anylog-operator-local-scripts:/app/deployment-scripts
+volumes:
+  anylog-operator-anylog:
+  anylog-operator-blockchain:
+  anylog-operator-data:
+  anylog-operator-local-scripts:
