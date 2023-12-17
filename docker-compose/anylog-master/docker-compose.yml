@@ -9,10 +9,11 @@ services:
     container_name: ${CONTAINER_NAME}
     stdin_open: true
     tty: true
-    # network_mode: "${NETWORK}"  # Uncomment and configure if needed
-    ports:
-      - 32048:32048
-      - 32049:32049
+    network_mode: "${NETWORK}"  # Uncomment and configure if needed
+#
+#    ports:
+#      - 32048:32048
+#      - 32049:32049
     environment:
       - INIT_TYPE=${INIT_TYPE}
     volumes:
