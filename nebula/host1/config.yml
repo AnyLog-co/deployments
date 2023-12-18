@@ -19,7 +19,7 @@ pki:
 #   "{nebula ip}": ["{routable ip/dns name}:{routable port}"]
 # Example, if your lighthouse has the nebula IP of 192.168.100.1 and has the real ip address of 100.64.22.11 and runs on port 4242:
 static_host_map:
-  "192.168.100.3": ["178.79.143.174:4242"]
+  "192.168.100.1": ["172.105.4.104:4242"]
 
 # The static_map config stanza can be used to configure how the static_host_map behaves.
 #static_map:
@@ -53,7 +53,7 @@ lighthouse:
   # IMPORTANT: THIS SHOULD BE EMPTY ON LIGHTHOUSE NODES
   # IMPORTANT2: THIS SHOULD BE LIGHTHOUSES' NEBULA IPs, NOT LIGHTHOUSES' REAL ROUTABLE IPs
   hosts:
-  - "192.168.100.1"
+    #    - "192.168.100.1"
 
   # remote_allow_list allows you to control ip ranges that this node will
   # consider when handshaking to another node. By default, any remote IPs are
@@ -340,4 +340,3 @@ firewall:
     - port: any
       proto: tcp
       host: any
-
