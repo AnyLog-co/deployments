@@ -340,4 +340,3 @@ firewall:
     - port: any
       proto: tcp
       host: any
-
