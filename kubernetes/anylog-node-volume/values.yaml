@@ -1,9 +1,0 @@
-metadata:
-  # Kubernetes Instance namespace
-  namespace: default
-  # hostname for deployment
-  hostname: anylog-node
-  # deployment application name
-  app_name: anylog-node
-  # Pod application name
-  pod_name: anylog-node-pod
