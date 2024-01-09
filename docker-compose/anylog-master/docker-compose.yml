@@ -9,7 +9,7 @@ services:
     container_name: ${CONTAINER_NAME}
     stdin_open: true
     tty: true
-    network_mode: "bridge"  # Use the bridge network mode
+    network_mode: "${NETWORK}"
     ports:
       - ${ANYLOG_SERVER_PORT}:${ANYLOG_SERVER_PORT}
       - ${ANYLOG_REST_PORT}:${ANYLOG_REST_PORT}
