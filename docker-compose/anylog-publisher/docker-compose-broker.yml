@@ -9,10 +9,11 @@ services:
     container_name: ${CONTAINER_NAME}
     stdin_open: true
     tty: true
-    ports:
-      - ${ANYLOG_SERVER_PORT}:${ANYLOG_SERVER_PORT}
-      - ${ANYLOG_REST_PORT}:${ANYLOG_REST_PORT}
-      - ${ANYLOG_BROKER_PORT}:${ANYLOG_BROKER_PORT}
+    network_mode: host
+#    ports:
+#      - ${ANYLOG_SERVER_PORT}:${ANYLOG_SERVER_PORT}
+#      - ${ANYLOG_REST_PORT}:${ANYLOG_REST_PORT}
+#      - ${ANYLOG_BROKER_PORT}:${ANYLOG_BROKER_PORT}
     environment:
       - INIT_TYPE=${INIT_TYPE}
     volumes:
