@@ -45,8 +45,8 @@ fi
 
 
 if [[ ${DEPLOYMENT_TYPE} == docker ]] ; then
-  if [[ -d "${ROOT_PATH}/docker-compose/anylog-${NODETYPE}" ]] ; then
-    cd ${ROOT_PATH}/docker-compose/anylog-${NODETYPE}
+  if [[ -d "${ROOT_PATH}/docker-compose/${NODETYPE}" ]] ; then
+    cd ${ROOT_PATH}/docker-compose/${NODETYPE}
   else
     echo "Invalid deployment type: ${NODETYPE}"
     exit 1
