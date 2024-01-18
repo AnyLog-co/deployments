@@ -1,0 +1,27 @@
+version: "2.2"
+services:
+  anylog-publisher:
+    image: anylogco/anylog-network:${TAG}
+    restart: always
+    env_file:
+      - anylog_configs.env
+      - advance_configs.env
+    container_name: ${CONTAINER_NAME}
+    stdin_open: true
+    tty: true
+    network_mode: host
+#    ports:
+#      - ${ANYLOG_SERVER_PORT}:${ANYLOG_SERVER_PORT}
+#      - ${ANYLOG_REST_PORT}:${ANYLOG_REST_PORT}
+    environment:
+      - INIT_TYPE=${INIT_TYPE}
+    volumes:
+      - anylog-publisher-anylog:/app/AnyLog-Network/anylog
+      - anylog-publisher-blockchain:/app/AnyLog-Network/blockchain
+      - anylog-publisher-data:/app/AnyLog-Network/data
+      - anylog-publisher-local-scripts:/app/deployment-scripts
+volumes:
+  anylog-publisher-anylog:
+  anylog-publisher-blockchain:
+  anylog-publisher-data:
+  anylog-publisher-local-scripts:
