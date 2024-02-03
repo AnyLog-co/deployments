@@ -344,9 +344,9 @@ firewall:
     - port: 443
       proto: tcp
       host: any
-    - port: 32048
+    - port: 32148
       proto: tcp
       host: any
-    - port: 32049
+    - port: 32149
       proto: tcp
       host: any
