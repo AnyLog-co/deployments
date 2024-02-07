@@ -7,7 +7,8 @@ import requests
 import socket
 import time
 
-LOCAL_IP = None
+HOSTNAME = socket.gethostname()
+
 VALUE_ARRAY = [
    -1 * math.pi, -1 * math.pi/2, -1 * math.pi/3,
    -1,
@@ -24,14 +25,6 @@ VALUE_ARRAY = [
    -1,
    -1 * math.pi/3, -1 * math.pi/2, -1 * math.pi
 ]
-
-
-def __local_ip():
-    global LOCAL_IP
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    LOCAL_IP = s.getsockname()[0]
-    s.close()
 
 
 def __put_data(conn:str, payload:str=None, exception:bool=False,)->bool:
@@ -104,7 +97,7 @@ def __data_generator(batch_size:int=10, sleep:float=0.5, latest_value:float=None
                 status = True
 
         payloads.append({
-            "hostname": LOCAL_IP,
+            "hostname": HOSTNAME,
             "timestamp": datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
             "value": value
         })
