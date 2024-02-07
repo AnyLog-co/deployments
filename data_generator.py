@@ -3,9 +3,11 @@ import datetime
 import json
 import math
 import random
+import requests
+import socket
 import time
 
-import requests
+HOSTNAME = socket.gethostname()
 
 VALUE_ARRAY = [
    -1 * math.pi, -1 * math.pi/2, -1 * math.pi/3,
@@ -63,15 +65,15 @@ def __put_data(conn:str, payload:str=None, exception:bool=False,)->bool:
     return status
 
 
-def __data_generator(batch_size:int=10, sleep:float=0.5, latest_value:float=None, bound:float=0)->(float, str):
+def __data_generator(batch_size:int=10, sleep:float=0.5, latest_value:float=None, amplitude:float=0)->(float, str):
     """
     Generate data set to be stored in AnyLog
     :args:
         batch_size:int - number of value sets per list
         sleep:float - wait time per row
         latest_value:float - latest value inputted by user
-        bound:float - by default, the value is between -pi and pi for a cosine graph. The bound allows for users to change
-        the "line of trajectory" of data coming in.
+        amplitude:float - by default, the value is between -pi and pi for a cosine graph. The amplitude allows for users to change
+        the amplitude of data coming in.
     :params:
         payloads:list - data to be stored in AnyLog
         value:float - generated value
@@ -80,15 +82,18 @@ def __data_generator(batch_size:int=10, sleep:float=0.5, latest_value:float=None
     """
     payloads = []
     for i in range(batch_size):
-
         status = False
+
         while status is False:
-            value = random.choice(VALUE_ARRAY) * (1 - bound)
+            value = random.choice(VALUE_ARRAY)
+            if amplitude != 0:
+                value = value * random.choice([1 - amplitude, 1, 1 + amplitude])
             if value != latest_value:
                 latest_value = value
                 status = True
 
         payloads.append({
+            "hostname": HOSTNAME,
             "timestamp": datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
             "value": value
         })
@@ -105,7 +110,7 @@ def main():
     parse.add_argument('--total-rows', type=int, default=100, help='Total rows to insert. If set to 0 run continuously')
     parse.add_argument('--batch-size', type=int, default=10, help='Number of rows per batch')
     parse.add_argument('--sleep', type=float, default=0.5, help='Wait time between each row')
-    parse.add_argument('--bound', type=float, default=0, help='by default, the value is between -pi and pi for a cosine graph. The bound allows for users to change the "line of trajectory" of data coming in.')
+    parse.add_argument('--amplitude', type=float, default=0, help='by default, the value is between -pi and pi for a cosine graph. The amplitude allows for users to change the amplitude of data coming in.')
     args = parse.parse_args()
 
     latest_value = None
@@ -114,7 +119,7 @@ def main():
 
     while True:
         latest_value, payloads = __data_generator(batch_size=args.batch_size, sleep=args.sleep,
-                                                  latest_value=latest_value, bound=args.bound)
+                                                  latest_value=latest_value, amplitude=args.amplitude)
         __put_data(conn=args.conn, payload=payloads)
 
         if args.total_rows >  0:
