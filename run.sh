@@ -45,15 +45,8 @@ fi
 
 
 if [[ ${DEPLOYMENT_TYPE} == docker ]] ; then
-  if [[ ${TRAINING} == true ]] ; then
-    if [[ ${NODETYPE} == master ]] || [[ ${NODETYPE} == operator ]] || [[ ${NODETYPE} == query ]] ; then
-      cd ${ROOT_PATH}/training/anylog-${NODETYPE} || (echo "Failed to cd into anylog-${NODETYPE} dir" && exit 1)
-    else
-      echo "Invalid deployment type: ${NODETYPE}"
-      exit 1
-    fi
-  elif [[ ${NODETYPE} == master ]] || [[ ${NODETYPE} == operator ]] || [[ ${NODETYPE} == query ]]  || [[ ${NODETYPE} == publisher ]] || [[ ${NODETYPE} == query-remote-cli ]] ; then
-    cd ${ROOT_PATH}/docker-compose/anylog-${NODETYPE} || (echo "Failed to cd into anylog-${NODETYPE} dir" && exit 1)
+  if [[ -d "${ROOT_PATH}/docker-compose/${NODETYPE}" ]] ; then
+    cd ${ROOT_PATH}/docker-compose/${NODETYPE}
   else
     echo "Invalid deployment type: ${NODETYPE}"
     exit 1
@@ -104,13 +97,24 @@ if [[ ${DEPLOYMENT_TYPE} == docker ]] ; then
     exit 1
   fi
 elif [[ ${DEPLOYMENT_TYPE} == helm ]] ; then
-  NODE_NAME=$(grep "pod_name" ${ROOT_PATH}/kubernetes/configs/anylog_${NODETYPE}.yaml | awk -F ":" '{print $2}')
+  export NODE_NAME=$(grep "pod_name" ${ROOT_PATH}/kubernetes/configs/anylog_${NODETYPE}.yaml | awk -F ":" '{print $2}')
+  export ANYLOG_SERVER_PORT=$(cat ${ROOT_PATH}/kubernetes/configs/anylog_${NODETYPE}.yaml | grep "ANYLOG_SERVER_PORT" | awk -F ":" '{print $2}')
+  export ANYLOG_REST_PORT=$(cat ${ROOT_PATH}/kubernetes/configs/anylog_${NODETYPE}.yaml | grep "ANYLOG_REST_PORT" |  awk -F ":" '{print $2}')
+
+  export PROXY_IP=$(cat ${ROOT_PATH}/kubernetes/configs/anylog_${NODETYPE}.yaml | grep "PROXY_IP" |  awk -F ":" '{print $2}')
+  export SERVICE_NAME=$(cat ${ROOT_PATH}/kubernetes/configs/anylog_${NODETYPE}.yaml | grep "service_name" |  awk -F ":" '{print $2}')
+
+  export ANYLOG_BROKER_PORT=""
+  if [[ ! $(grep "ANYLOG_BROKER_PORT" ${ROOT_PATH}/kubernetes/configs/anylog_${NODETYPE}.yaml |  awk -F ":" '{print $2}')   = '""' ]] ; then
+    export ANYLOG_BROKER_PORT=$(cat ${ROOT_PATH}/kubernetes/configs/anylog_${NODETYPE}.yaml | grep "ANYLOG_BROKER_PORT" |  awk -F ":" '{print $2}')
+  fi
+
   if [[ ${DOCKERCMD} == up ]] ; then
     helm install ${ROOT_PATH}/kubernetes/anylog-node-volume-1.22.3.tgz -f ${ROOT_PATH}/kubernetes/configs/anylog_${NODETYPE}.yaml --name-template ${NODE_NAME}-volume
     helm install ${ROOT_PATH}/kubernetes/anylog-node-1.22.3.tgz -f ${ROOT_PATH}/kubernetes/configs/anylog_${NODETYPE}.yaml --name-template ${NODE_NAME}
   elif [[ ${DOCKERCMD} == down ]] ; then
     helm uninstall ${NODE_NAME}
-    if [[ ${VOLUME} == down ]] ; then
+    if [[ ${VOLUME} == true ]] ; then
       helm uninstall ${NODE_NAME}-volume
     fi
   fi
