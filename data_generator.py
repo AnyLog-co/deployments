@@ -27,6 +27,7 @@ VALUE_ARRAY = [
 ]
 
 
+
 def __put_data(conn:str, payload:str=None, exception:bool=False,)->bool:
     """
     Publish data to AnyLog using PUT
@@ -120,7 +121,6 @@ def main():
     latest_value = None
     total_rows = 0
     is_last = False
-    __local_ip()
     while True:
         latest_value, payloads = __data_generator(batch_size=args.batch_size, sleep=args.sleep,
                                                   latest_value=latest_value, amplitude=args.amplitude)
