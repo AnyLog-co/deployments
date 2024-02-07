@@ -7,8 +7,7 @@ import requests
 import socket
 import time
 
-HOSTNAME = socket.gethostname()
-
+LOCAL_IP = None
 VALUE_ARRAY = [
    -1 * math.pi, -1 * math.pi/2, -1 * math.pi/3,
    -1,
@@ -27,6 +26,14 @@ VALUE_ARRAY = [
 ]
 
 
+def __local_ip():
+    global LOCAL_IP
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    LOCAL_IP = s.getsockname()[0]
+    s.close()
+
+
 def __put_data(conn:str, payload:str=None, exception:bool=False,)->bool:
     """
     Publish data to AnyLog using PUT
@@ -41,6 +48,10 @@ def __put_data(conn:str, payload:str=None, exception:bool=False,)->bool:
     :return:
         status
     """
+    if conn == 'print':
+        print(payload)
+        return True
+
     status = False
     headers = {
         'type': 'json',
@@ -93,7 +104,7 @@ def __data_generator(batch_size:int=10, sleep:float=0.5, latest_value:float=None
                 status = True
 
         payloads.append({
-            "hostname": HOSTNAME,
+            "hostname": LOCAL_IP,
             "timestamp": datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
             "value": value
         })
@@ -116,7 +127,7 @@ def main():
     latest_value = None
     total_rows = 0
     is_last = False
-
+    __local_ip()
     while True:
         latest_value, payloads = __data_generator(batch_size=args.batch_size, sleep=args.sleep,
                                                   latest_value=latest_value, amplitude=args.amplitude)
