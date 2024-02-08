@@ -1,6 +1,6 @@
 version: "2.2"
 services:
-  anylog-operator:
+  anylog-operator2:
     image: anylogco/anylog-network:${TAG}
     restart: always
     env_file:
@@ -16,13 +16,13 @@ services:
     environment:
       - INIT_TYPE=${INIT_TYPE}
     volumes:
-      - anylog-operator-anylog:/app/AnyLog-Network/anylog
-      - anylog-operator-blockchain:/app/AnyLog-Network/blockchain
-      - anylog-operator-data:/app/AnyLog-Network/data
-      - anylog-operator-local-scripts:/app/deployment-scripts
+      - anylog-operator2-anylog:/app/AnyLog-Network/anylog
+      - anylog-operator2-blockchain:/app/AnyLog-Network/blockchain
+      - anylog-operator2-data:/app/AnyLog-Network/data
+      - anylog-operator2-local-scripts:/app/deployment-scripts
 
 volumes:
-  anylog-operator-anylog:
-  anylog-operator-blockchain:
-  anylog-operator-data:
-  anylog-operator-local-scripts:
+  anylog-operator2-anylog:
+  anylog-operator2-blockchain:
+  anylog-operator2-data:
+  anylog-operator2-local-scripts:
